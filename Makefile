@@ -1,8 +1,8 @@
 dev:
-	wgo run ./cmd/main.go
+	wgo run ./src/main.go
 
 start:
-	go run ./cmd/main.go
+	go run ./src/main.go
 
 setup:
 	go install go.uber.org/mock/mockgen@latest
