@@ -1,6 +1,8 @@
 package main
 
-import "mars-rover-navigation/src/console"
+import (
+	"mars-rover-navigation/src/console"
+)
 
 func main() {
 	c, err := console.Wire()
