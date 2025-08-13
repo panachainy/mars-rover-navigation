@@ -1,32 +1,24 @@
 package game
 
+import "mars-rover-navigation/src/model"
+
 type Game struct {
-	Grid      [][]Cell
-	Size      int
-	Obstacles []Position
-	Commands  string
+	Commands string
 }
 
-type Cell struct {
-	X        int
-	Y        int
-	HasRover bool
-}
-
-type Position struct {
-	X int
-	Y int
-}
-
-func NewGame(size int, obstacles []Position, commands string) *Game {
-	grid := make([][]Cell, size)
+func NavigateRover(size int, obstacles []model.Position, commands string) *Game {
+	grid := make([][]model.Cell, size)
 	for i := range grid {
-		grid[i] = make([]Cell, size)
+		grid[i] = make([]model.Cell, size)
 	}
+
+	// {
+	// "final_position": [0, 4],
+	// "final_direction": "N" ,
+	// "status": "Out of bounds"
+	// }
+
 	return &Game{
-		Grid:      grid,
-		Size:      size,
-		Obstacles: obstacles,
-		Commands:  commands,
+		Commands: commands,
 	}
 }

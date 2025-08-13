@@ -3,6 +3,8 @@ package console
 import (
 	"flag"
 	"fmt"
+	"mars-rover-navigation/src/model"
+	"mars-rover-navigation/src/modules/game"
 	"strings"
 
 	"github.com/labstack/gommon/log"
@@ -26,6 +28,24 @@ func Provide() *consoleImpl {
 func (s *consoleImpl) Start() {
 	log.Info("started")
 
+	gridSize, obstacles, commands, err := s.processFlags()
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	fmt.Printf("Grid size: %d\n", gridSize)
+	fmt.Printf("Obstacles: %v\n", obstacles)
+	fmt.Printf("Commands: %s\n", commands)
+
+	log.Infof("Grid size: %d, Obstacles: %v, Commands: %s", gridSize, obstacles, commands)
+
+	game := game.NavigateRover(gridSize, obstacles, commands)
+
+	// TODO: new game
+}
+
+func (s *consoleImpl) processFlags() (int, []model.Position, string, error) {
 	var gridSize int
 	var obstaclesInput string
 	var commands string
@@ -38,29 +58,26 @@ func (s *consoleImpl) Start() {
 	if gridSize == 0 {
 		fmt.Println("Error: grid size is required")
 		flag.Usage()
-		return
+		return 0, nil, "", fmt.Errorf("grid size is required")
 	}
 
 	if commands == "" {
 		fmt.Println("Error: commands are required")
 		flag.Usage()
-		return
+		return 0, nil, "", fmt.Errorf("commands are required")
 	}
 
 	if err := s.validateObstaclesInput(obstaclesInput); err != nil {
 		log.Error(err)
-		return
+		return 0, nil, "", err
 	}
 
 	obstacles := s.parseObstacles(obstaclesInput)
-
-	fmt.Printf("Grid size: %d\n", gridSize)
-	fmt.Printf("Obstacles: %v\n", obstacles)
-	fmt.Printf("Commands: %s\n", commands)
+	return gridSize, obstacles, commands, nil
 }
 
-func (s *consoleImpl) parseObstacles(obstaclesInput string) [][]int {
-	var obstacles [][]int
+func (s *consoleImpl) parseObstacles(obstaclesInput string) []model.Position {
+	var obstacles []model.Position
 
 	if obstaclesInput == "[]" || strings.TrimSpace(obstaclesInput[1:len(obstaclesInput)-1]) == "" {
 		return obstacles
@@ -78,7 +95,7 @@ func (s *consoleImpl) parseObstacles(obstaclesInput string) [][]int {
 			var x, y int
 			fmt.Sscanf(pairStrs[i], "%d", &x)
 			fmt.Sscanf(pairStrs[i+1], "%d", &y)
-			obstacles = append(obstacles, []int{x, y})
+			obstacles = append(obstacles, model.Position{X: x, Y: y})
 		}
 	}
 

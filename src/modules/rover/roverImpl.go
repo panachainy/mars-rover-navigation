@@ -1,15 +1,15 @@
 package rover
 
+import "mars-rover-navigation/src/model"
+
 type roverImpl struct {
-	X         int
-	Y         int
+	Position  model.Position
 	Direction string
 }
 
 func NewRoverImpl(x, y int, direction string) *roverImpl {
 	return &roverImpl{
-		X:         x,
-		Y:         y,
+		Position:  model.Position{X: x, Y: y},
 		Direction: direction,
 	}
 }
@@ -17,13 +17,13 @@ func NewRoverImpl(x, y int, direction string) *roverImpl {
 func (r *roverImpl) Move() {
 	switch r.Direction {
 	case "N":
-		r.Y++
+		r.Position.Y++
 	case "S":
-		r.Y--
+		r.Position.Y--
 	case "E":
-		r.X++
+		r.Position.X++
 	case "W":
-		r.X--
+		r.Position.X--
 	}
 }
 
