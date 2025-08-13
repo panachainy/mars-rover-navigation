@@ -1,5 +1,5 @@
 dev:
-	wgo run ./src/main.go
+	wgo run ./src/main.go --grid 10 --obstacles "[(1,2),(3,4)]" --commands "FFRRL"
 
 start:
 	go run ./src/main.go
