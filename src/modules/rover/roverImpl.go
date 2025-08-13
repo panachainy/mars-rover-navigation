@@ -6,7 +6,7 @@ type roverImpl struct {
 	Direction string
 }
 
-func NewroverImpl(x, y int, direction string) *roverImpl {
+func NewRoverImpl(x, y int, direction string) *roverImpl {
 	return &roverImpl{
 		X:         x,
 		Y:         y,
