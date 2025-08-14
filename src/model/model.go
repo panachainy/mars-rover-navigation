@@ -3,9 +3,9 @@ package model
 // TODO: will refactor
 
 type Cell struct {
-	X        int
-	Y        int
-	HasRover bool
+	Position   Position
+	HasRover   bool
+	IsObstacle bool
 }
 
 type Position struct {
