@@ -26,8 +26,31 @@ func NewEnvironment(size int, obstacles []model.Position) *environmentImpl {
 
 		for i := range instance.Grid {
 			instance.Grid[i] = make([]model.Cell, size)
+			for j := range instance.Grid[i] {
+				isObstacle := isMatchObstacles(
+					model.Position{
+						X: i,
+						Y: j,
+					}, obstacles,
+				)
+				instance.Grid[i][j] = model.Cell{Position: model.Position{X: i, Y: j}, IsObstacle: isObstacle}
+			}
 		}
 	})
 
 	return instance
+}
+
+func (e *environmentImpl) GetGrid() [][]model.Cell {
+	return e.Grid
+}
+
+func isMatchObstacles(position model.Position, obstacles []model.Position) bool {
+	for _, o := range obstacles {
+		if position.X == o.X && position.Y == o.Y {
+			return true
+		}
+	}
+
+	return false
 }
