@@ -1,6 +1,7 @@
 package console
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"mars-rover-navigation/src/model"
@@ -40,9 +41,17 @@ func (s *consoleImpl) Start() {
 
 	log.Infof("Grid size: %d, Obstacles: %v, Commands: %s", gridSize, obstacles, commands)
 
-	game := game.NavigateRover(gridSize, obstacles, commands)
+	g := game.NewGame()
+	result := g.NavigateRover(gridSize, obstacles, commands)
 
-	// TODO: new game
+	fmt.Println()
+	resultJSON, err := json.MarshalIndent(result, "", "  ")
+	if err != nil {
+		log.Error("Failed to marshal result to JSON:", err)
+		fmt.Println(result)
+	} else {
+		fmt.Println(string(resultJSON))
+	}
 }
 
 func (s *consoleImpl) processFlags() (int, []model.Position, string, error) {
