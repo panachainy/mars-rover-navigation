@@ -17,20 +17,20 @@ type testCase struct {
 func TestMarsRoverIntegration(t *testing.T) {
 	tests := []testCase{
 		// FIXME: wait question answer
-		// {
-		// 	name:      "Success",
-		// 	grid:      5,
-		// 	obstacles: "[(1,2),(3,3)]",
-		// 	commands:  "LMLMLMLMM",
-		// 	want:      `{"final_position": [1, 3], "final_direction": "N", "status": "Success"}`,
-		// },
-		// {
-		// 	name:      "Obstacle encountered",
-		// 	grid:      5,
-		// 	obstacles: "[(1,2),(3,3)]",
-		// 	commands:  "LMLMLMLMMMM",
-		// 	want:      `{"final_position": [1, 2], "final_direction": "N", "status": "Obstacle encountered"}`,
-		// },
+		{
+			name:      "Success",
+			grid:      5,
+			obstacles: "[(1,2),(3,3)]",
+			commands:  "LMLMLMLMM",
+			want:      "{\"final_position\": [1, 3], \"final_direction\": \"N\", \"status\": \"Success\"}\n",
+		},
+		{
+			name:      "Obstacle encountered",
+			grid:      5,
+			obstacles: "[(1,2),(3,3)]",
+			commands:  "LMLMLMLMMMM",
+			want:      "{\"final_position\": [1, 2], \"final_direction\": \"N\", \"status\": \"Obstacle encountered\"}\n",
+		},
 		{
 			name:      "Out of bounds",
 			grid:      5,
