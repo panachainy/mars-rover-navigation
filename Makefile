@@ -5,12 +5,7 @@ start:
 	go run ./src/main.go
 
 setup:
-	go install go.uber.org/mock/mockgen@latest
-	go install github.com/axw/gocov/gocov@latest
 	go install github.com/bokwoon95/wgo@latest
-	go install golang.org/x/tools/gopls@latest
-	make auth.newkey
-	brew install golang-migrate
 
 tidy:
 	go mod tidy -v
