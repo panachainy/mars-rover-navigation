@@ -4,8 +4,9 @@ import "mars-rover-navigation/src/model"
 
 type Environment interface {
 	GetGrid() [][]model.Cell
-	CanMove(actorPosition model.Position) bool
+	CanMove(actorPosition model.Position) CanMoveStatus
 }
+
 type CanMoveStatus string
 
 const (
