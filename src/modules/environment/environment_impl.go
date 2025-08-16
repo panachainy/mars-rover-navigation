@@ -51,8 +51,11 @@ func (e *environmentImpl) GetGrid() [][]model.Cell {
 }
 
 func (e *environmentImpl) CanMove(actorPosition model.Position) CanMoveStatus {
+	if actorPosition.X < 0 || actorPosition.X >= e.Size || actorPosition.Y < 0 || actorPosition.Y >= e.Size {
+		return OutOfBounds
+	}
+
 	newRoverGrid := e.Grid[actorPosition.X][actorPosition.Y]
-	// OutOfBounds
 
 	if newRoverGrid.IsObstacle {
 		return ObstacleEncountered

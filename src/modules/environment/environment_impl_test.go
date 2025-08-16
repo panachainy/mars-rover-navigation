@@ -160,6 +160,34 @@ func TestCanMove(t *testing.T) {
 			actorPosition: model.Position{X: 3, Y: 0},
 			expected:      Success,
 		},
+		{
+			name:          "cannot move out of bounds - negative X",
+			size:          5,
+			obstacles:     []model.Position{{X: 1, Y: 1}},
+			actorPosition: model.Position{X: -1, Y: 2},
+			expected:      OutOfBounds,
+		},
+		{
+			name:          "cannot move out of bounds - negative Y",
+			size:          5,
+			obstacles:     []model.Position{{X: 1, Y: 1}},
+			actorPosition: model.Position{X: 2, Y: -1},
+			expected:      OutOfBounds,
+		},
+		{
+			name:          "cannot move out of bounds - X too large",
+			size:          5,
+			obstacles:     []model.Position{{X: 1, Y: 1}},
+			actorPosition: model.Position{X: 5, Y: 2},
+			expected:      OutOfBounds,
+		},
+		{
+			name:          "cannot move out of bounds - Y too large",
+			size:          5,
+			obstacles:     []model.Position{{X: 1, Y: 1}},
+			actorPosition: model.Position{X: 2, Y: 5},
+			expected:      OutOfBounds,
+		},
 	}
 
 	for _, tt := range tests {
