@@ -4,7 +4,6 @@ import (
 	"mars-rover-navigation/src/model"
 	"mars-rover-navigation/src/modules/environment"
 	"mars-rover-navigation/src/modules/rover"
-	"sync"
 )
 
 type gameImpl struct {
@@ -24,25 +23,11 @@ type Result struct {
 	Status         Status          `json:"status"`
 }
 
-var (
-	instance *gameImpl
-	once     sync.Once
-)
-
 func NewGame() *gameImpl {
-	once.Do(func() {
-		instance = &gameImpl{}
-	})
-	return instance
-}
-
-func Reset() {
-	once = sync.Once{}
-	instance = nil
+	return &gameImpl{}
 }
 
 func (e *gameImpl) NavigateRover(size int, obstacles []model.Position, commands string) Result {
-
 	var env environment.Environment = environment.NewEnvironment(size, obstacles)
 
 	// new rover
