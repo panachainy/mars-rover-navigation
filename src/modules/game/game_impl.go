@@ -3,6 +3,7 @@ package game
 import (
 	"mars-rover-navigation/src/model"
 	"mars-rover-navigation/src/modules/environment"
+	"mars-rover-navigation/src/modules/rover"
 	"sync"
 )
 
@@ -18,9 +19,9 @@ const (
 )
 
 type Result struct {
-	FinalPosition  model.Position `json:"final_position"`
-	FinalDirection string         `json:"final_direction"`
-	Status         Status         `json:"status"`
+	FinalPosition  model.Position  `json:"final_position"`
+	FinalDirection model.Direction `json:"final_direction"`
+	Status         Status          `json:"status"`
 }
 
 var (
@@ -37,13 +38,28 @@ func NewGame() *gameImpl {
 
 func (e *gameImpl) NavigateRover(size int, obstacles []model.Position, commands string) Result {
 
-	env := environment.NewEnvironment(size, obstacles)
-	grid := env.GetGrid()
+	var env environment.Environment = environment.NewEnvironment(size, obstacles)
+	// grid := env.CanMove()
+
+	// new rover
+	var rover rover.Rover = rover.NewRover(0, 0, "N")
+
+	// try integrate together
+	for _, cmd := range commands {
+		switch cmd {
+		case 'M':
+			rover.Move()
+		case 'L':
+			rover.TurnLeft()
+		case 'R':
+			rover.TurnRight()
+		}
+	}
 
 	// FIXME: change mock to real one
 	return Result{
-		FinalPosition:  model.Position{X: 0, Y: 4},
-		FinalDirection: "N",
+		FinalPosition:  rover.GetPosition(),
+		FinalDirection: rover.GetDirection(),
 		Status:         StatusSuccess,
 	}
 }
