@@ -44,7 +44,6 @@ func Reset() {
 func (e *gameImpl) NavigateRover(size int, obstacles []model.Position, commands string) Result {
 
 	var env environment.Environment = environment.NewEnvironment(size, obstacles)
-	// grid := env.CanMove()
 
 	// new rover
 	var rover rover.Rover = rover.NewRover(0, 0, "N")
@@ -53,7 +52,25 @@ func (e *gameImpl) NavigateRover(size int, obstacles []model.Position, commands 
 	for _, cmd := range commands {
 		switch cmd {
 		case 'M':
-			rover.Move()
+			expectNewPosition := rover.GetTryMovePosition()
+			canMoveStatus := env.CanMove(expectNewPosition)
+
+			switch canMoveStatus {
+			case environment.Success:
+				rover.Move()
+			case environment.ObstacleEncountered:
+				return Result{
+					FinalPosition:  rover.GetPosition(),
+					FinalDirection: rover.GetDirection(),
+					Status:         StatusObstacleEncountered,
+				}
+			case environment.OutOfBounds:
+				return Result{
+					FinalPosition:  rover.GetPosition(),
+					FinalDirection: rover.GetDirection(),
+					Status:         StatusOutOfBounds,
+				}
+			}
 		case 'L':
 			rover.TurnLeft()
 		case 'R':
