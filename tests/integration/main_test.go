@@ -45,6 +45,34 @@ func TestMarsRoverIntegration(t *testing.T) {
 			commands:  "LMXMLM",
 			want:      "{\"final_position\": [0, 0], \"final_direction\": \"N\", \"status\": \"Invalid input\"}\n",
 		},
+		{
+			name:      "Minimal grid 1x1",
+			grid:      1,
+			obstacles: "[]",
+			commands:  "M",
+			want:      "{\"final_position\": [0, 0], \"final_direction\": \"N\", \"status\": \"Out of bounds\"}\n",
+		},
+		{
+			name:      "Minimal grid 1x1 turn only",
+			grid:      1,
+			obstacles: "[]",
+			commands:  "LR",
+			want:      "{\"final_position\": [0, 0], \"final_direction\": \"N\", \"status\": \"Success\"}\n",
+		},
+		{
+			name:      "Large grid",
+			grid:      100,
+			obstacles: "[]",
+			commands:  "RMMMMM",
+			want:      "{\"final_position\": [5, 0], \"final_direction\": \"E\", \"status\": \"Success\"}\n",
+		},
+		{
+			name:      "Long command string",
+			grid:      10,
+			obstacles: "[]",
+			commands:  "RMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRM",
+			want:      "{\"final_position\": [0, 0], \"final_direction\": \"N\", \"status\": \"Success\"}\n",
+		},
 	}
 
 	for _, tc := range tests {
