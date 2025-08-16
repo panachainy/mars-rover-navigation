@@ -109,3 +109,67 @@ func TestIsMatchObstacles(t *testing.T) {
 		})
 	}
 }
+
+func TestCanMove(t *testing.T) {
+	tests := []struct {
+		name          string
+		size          int
+		obstacles     []model.Position
+		actorPosition model.Position
+		expected      CanMoveStatus
+	}{
+		{
+			name:          "can move to empty cell",
+			size:          5,
+			obstacles:     []model.Position{{X: 1, Y: 1}, {X: 3, Y: 3}},
+			actorPosition: model.Position{X: 0, Y: 0},
+			expected:      Success,
+		},
+		{
+			name:          "cannot move to obstacle cell",
+			size:          5,
+			obstacles:     []model.Position{{X: 1, Y: 1}, {X: 3, Y: 3}},
+			actorPosition: model.Position{X: 1, Y: 1},
+			expected:      ObstacleEncountered,
+		},
+		{
+			name:          "can move to corner cell",
+			size:          3,
+			obstacles:     []model.Position{{X: 1, Y: 1}},
+			actorPosition: model.Position{X: 2, Y: 2},
+			expected:      Success,
+		},
+		// {
+		// 	name:          "cannot move to another obstacle",
+		// 	size:          4,
+		// 	obstacles:     []model.Position{{X: 0, Y: 1}, {X: 2, Y: 3}},
+		// 	actorPosition: model.Position{X: 2, Y: 3},
+		// 	expected:      ObstacleEncountered,
+		// },
+		// {
+		// 	name:          "can move when no obstacles",
+		// 	size:          3,
+		// 	obstacles:     []model.Position{},
+		// 	actorPosition: model.Position{X: 1, Y: 1},
+		// 	expected:      Success,
+		// },
+		{
+			name:          "can move to edge cell",
+			size:          4,
+			obstacles:     []model.Position{{X: 1, Y: 1}},
+			actorPosition: model.Position{X: 3, Y: 0},
+			expected:      Success,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			env := NewEnvironment(tt.size, tt.obstacles)
+			result := env.CanMove(tt.actorPosition)
+			if result != tt.expected {
+				t.Errorf("CanMove(%+v) = %v, expected %v",
+					tt.actorPosition, result, tt.expected)
+			}
+		})
+	}
+}
