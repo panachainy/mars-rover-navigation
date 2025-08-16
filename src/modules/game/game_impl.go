@@ -62,11 +62,8 @@ func (e *gameImpl) NavigateRover(size int, obstacles []model.Position, commands 
 	}
 
 	var env environment.Environment = environment.NewEnvironment(size, obstacles)
-
-	// new rover
 	var rover rover.Rover = rover.NewRover(0, 0, "N")
 
-	// try integrate together
 	for _, cmd := range commands {
 		switch cmd {
 		case 'M':
