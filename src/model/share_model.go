@@ -1,7 +1,5 @@
 package model
 
-// TODO: will refactor
-
 type Cell struct {
 	Position   Position
 	IsObstacle bool
