@@ -36,6 +36,11 @@ func NewGame() *gameImpl {
 	return instance
 }
 
+func Reset() {
+	once = sync.Once{}
+	instance = nil
+}
+
 func (e *gameImpl) NavigateRover(size int, obstacles []model.Position, commands string) Result {
 
 	var env environment.Environment = environment.NewEnvironment(size, obstacles)

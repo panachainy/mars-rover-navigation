@@ -41,6 +41,11 @@ func NewEnvironment(size int, obstacles []model.Position) *environmentImpl {
 	return instance
 }
 
+func Reset() {
+	once = sync.Once{}
+	instance = nil
+}
+
 func (e *environmentImpl) GetGrid() [][]model.Cell {
 	return e.Grid
 }
