@@ -48,7 +48,7 @@ func (s *consoleImpl) processFlags() (int, []model.Position, string, error) {
 	var obstaclesInput string
 	var commands string
 
-	flag.IntVar(&gridSize, "grid", 0, "Grid size")
+	flag.IntVar(&gridSize, "grid_size", 0, "Grid size")
 	flag.StringVar(&obstaclesInput, "obstacles", "[]", "Obstacles in format [(x,y),(x,y),...]")
 	flag.StringVar(&commands, "commands", "", "Commands string")
 	flag.Parse()

@@ -42,7 +42,7 @@ func TestMarsRoverIntegration(t *testing.T) {
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			cmd := exec.Command("go", "run", "../../src/main.go",
-				"--grid", strconv.Itoa(tc.grid),
+				"--grid_size", strconv.Itoa(tc.grid),
 				"--obstacles", tc.obstacles,
 				"--commands", tc.commands,
 			)

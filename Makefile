@@ -1,5 +1,5 @@
 dev:
-	wgo run ./src/main.go --grid 5 --obstacles "[(1,2),(3,3)]" --commands "LMLMLMLMM"
+	wgo run ./src/main.go --grid_size 5 --obstacles "[(1,2),(3,3)]" --commands "LMLMLMLMM"
 
 start:
 	go run ./src/main.go
