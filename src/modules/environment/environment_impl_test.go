@@ -139,20 +139,20 @@ func TestCanMove(t *testing.T) {
 			actorPosition: model.Position{X: 2, Y: 2},
 			expected:      Success,
 		},
-		// {
-		// 	name:          "cannot move to another obstacle",
-		// 	size:          4,
-		// 	obstacles:     []model.Position{{X: 0, Y: 1}, {X: 2, Y: 3}},
-		// 	actorPosition: model.Position{X: 2, Y: 3},
-		// 	expected:      ObstacleEncountered,
-		// },
-		// {
-		// 	name:          "can move when no obstacles",
-		// 	size:          3,
-		// 	obstacles:     []model.Position{},
-		// 	actorPosition: model.Position{X: 1, Y: 1},
-		// 	expected:      Success,
-		// },
+		{
+			name:          "cannot move to another obstacle",
+			size:          4,
+			obstacles:     []model.Position{{X: 0, Y: 1}, {X: 2, Y: 3}},
+			actorPosition: model.Position{X: 2, Y: 3},
+			expected:      ObstacleEncountered,
+		},
+		{
+			name:          "can move when no obstacles",
+			size:          3,
+			obstacles:     []model.Position{},
+			actorPosition: model.Position{X: 1, Y: 1},
+			expected:      Success,
+		},
 		{
 			name:          "can move to edge cell",
 			size:          4,
@@ -164,6 +164,7 @@ func TestCanMove(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			defer Reset()
 			env := NewEnvironment(tt.size, tt.obstacles)
 			result := env.CanMove(tt.actorPosition)
 			if result != tt.expected {
