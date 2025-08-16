@@ -200,3 +200,54 @@ func TestGetDirection(t *testing.T) {
 	}
 }
 
+func TestComplexMovementSequence(t *testing.T) {
+	rover := NewRover(0, 0, model.North)
+
+	// Move forward, turn right, move forward, turn right, move forward, turn right, move forward
+	// Should end up at origin facing West
+	rover.Move()      // (0, 1) facing North
+	rover.TurnRight() // (0, 1) facing East
+	rover.Move()      // (1, 1) facing East
+	rover.TurnRight() // (1, 1) facing South
+	rover.Move()      // (1, 0) facing South
+	rover.TurnRight() // (1, 0) facing West
+	rover.Move()      // (0, 0) facing West
+
+	if rover.Position.X != 0 || rover.Position.Y != 0 {
+		t.Errorf("Expected final position (0, 0), got (%d, %d)", rover.Position.X, rover.Position.Y)
+	}
+
+	if rover.Direction != model.West {
+		t.Errorf("Expected final direction %s, got %s", model.West, rover.Direction)
+	}
+}
+
+func TestFullRotation(t *testing.T) {
+	rover := NewRover(5, 5, model.North)
+	initialPos := rover.Position
+
+	// Four left turns should bring us back to North
+	rover.TurnLeft() // West
+	rover.TurnLeft() // South
+	rover.TurnLeft() // East
+	rover.TurnLeft() // North
+
+	if rover.Direction != model.North {
+		t.Errorf("After four left turns, expected direction %s, got %s", model.North, rover.Direction)
+	}
+
+	// Position should remain unchanged
+	if rover.Position != initialPos {
+		t.Error("Position should not change during rotation")
+	}
+
+	// Four right turns should also bring us back to North
+	rover.TurnRight() // East
+	rover.TurnRight() // South
+	rover.TurnRight() // West
+	rover.TurnRight() // North
+
+	if rover.Direction != model.North {
+		t.Errorf("After four right turns, expected direction %s, got %s", model.North, rover.Direction)
+	}
+}
