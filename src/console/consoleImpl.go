@@ -26,8 +26,6 @@ func Provide() *consoleImpl {
 }
 
 func (s *consoleImpl) Start() {
-	log.Info("started")
-
 	gridSize, obstacles, commands, err := s.processFlags()
 	if err != nil {
 		log.Error(err)
@@ -36,8 +34,6 @@ func (s *consoleImpl) Start() {
 
 	var g game.Game = game.NewGame()
 	result := g.NavigateRover(gridSize, obstacles, commands)
-
-	fmt.Println()
 
 	fmt.Printf("{\"final_position\": [%d, %d], \"final_direction\": \"%s\", \"status\": \"%s\"}\n",
 		result.FinalPosition.X, result.FinalPosition.Y, result.FinalDirection, result.Status)
