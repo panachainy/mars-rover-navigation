@@ -16,20 +16,19 @@ type testCase struct {
 
 func TestMarsRoverIntegration(t *testing.T) {
 	tests := []testCase{
-		// FIXME: wait question answer
 		{
 			name:      "Success",
 			grid:      5,
 			obstacles: "[(1,2),(3,3)]",
-			commands:  "LMLMLMLMM",
-			want:      "{\"final_position\": [1, 3], \"final_direction\": \"N\", \"status\": \"Success\"}\n",
+			commands:  "MMMRM",
+			want:      "{\"final_position\": [1, 3], \"final_direction\": \"E\", \"status\": \"Success\"}\n",
 		},
 		{
 			name:      "Obstacle encountered",
 			grid:      5,
 			obstacles: "[(1,2),(3,3)]",
-			commands:  "LMLMLMLMMMM",
-			want:      "{\"final_position\": [1, 2], \"final_direction\": \"N\", \"status\": \"Obstacle encountered\"}\n",
+			commands:  "MMRM",
+			want:      "{\"final_position\": [0, 2], \"final_direction\": \"E\", \"status\": \"Obstacle encountered\"}\n",
 		},
 		{
 			name:      "Out of bounds",
@@ -70,8 +69,8 @@ func TestMarsRoverIntegration(t *testing.T) {
 			name:      "Long command string",
 			grid:      10,
 			obstacles: "[]",
-			commands:  "RMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRM",
-			want:      "{\"final_position\": [0, 0], \"final_direction\": \"N\", \"status\": \"Success\"}\n",
+			commands:  "MMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRMRM",
+			want:      "{\"final_position\": [1, 2], \"final_direction\": \"E\", \"status\": \"Success\"}\n",
 		},
 	}
 

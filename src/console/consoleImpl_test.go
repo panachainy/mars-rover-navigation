@@ -10,10 +10,10 @@ import (
 func TestConsoleImpl_Success(t *testing.T) {
 	grid := 5
 	obstacles := []model.Position{{X: 1, Y: 2}, {X: 3, Y: 3}}
-	commands := "LMLMLMLMM"
+	commands := "MMMRM"
 	want := game.Result{
 		FinalPosition:  model.Position{X: 1, Y: 3},
-		FinalDirection: model.North,
+		FinalDirection: model.East,
 		Status:         game.StatusSuccess,
 	}
 
@@ -28,10 +28,10 @@ func TestConsoleImpl_Success(t *testing.T) {
 func TestConsoleImpl_ObstacleEncountered(t *testing.T) {
 	grid := 5
 	obstacles := []model.Position{{X: 1, Y: 2}, {X: 3, Y: 3}}
-	commands := "LMLMLMLMMMM"
+	commands := "MMRM"
 	want := game.Result{
-		FinalPosition:  model.Position{X: 1, Y: 2},
-		FinalDirection: model.North,
+		FinalPosition:  model.Position{X: 0, Y: 2},
+		FinalDirection: model.East,
 		Status:         game.StatusObstacleEncountered,
 	}
 
