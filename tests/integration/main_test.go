@@ -23,20 +23,20 @@ func TestMarsRoverIntegration(t *testing.T) {
 			commands:  "LMLMLMLMM",
 			want:      `{"final_position": [1, 3], "final_direction": "N", "status": "Success"}`,
 		},
-		// {
-		// 	name:      "Obstacle encountered",
-		// 	grid:      5,
-		// 	obstacles: "[(1,2),(3,3)]",
-		// 	commands:  "LMLMLMLMMMM",
-		// 	want:      `{"final_position": [1, 2], "final_direction": "N", "status": "Obstacle encountered"}`,
-		// },
-		// {
-		// 	name:      "Out of bounds",
-		// 	grid:      5,
-		// 	obstacles: "[]",
-		// 	commands:  "MMMMMMMM",
-		// 	want:      `{"final_position": [0, 4], "final_direction": "N", "status": "Out of bounds"}`,
-		// },
+		{
+			name:      "Obstacle encountered",
+			grid:      5,
+			obstacles: "[(1,2),(3,3)]",
+			commands:  "LMLMLMLMMMM",
+			want:      `{"final_position": [1, 2], "final_direction": "N", "status": "Obstacle encountered"}`,
+		},
+		{
+			name:      "Out of bounds",
+			grid:      5,
+			obstacles: "[]",
+			commands:  "MMMMMMMM",
+			want:      `{"final_position": [0, 4], "final_direction": "N", "status": "Out of bounds"}`,
+		},
 	}
 
 	for _, tc := range tests {
@@ -57,52 +57,3 @@ func TestMarsRoverIntegration(t *testing.T) {
 		})
 	}
 }
-
-// [exmaple cli] `go run ./src/main.go --grid 5 --obstacles "[(1,2),(3,3)]" --commands "LMLMLMLMM"`
-
-// [use-case]
-
-// # =================
-// # grid
-// # size = 5
-// # obstacles = [(1, 2), (3, 3)]
-// # commands = "LMLMLMLMM"
-
-// ----
-// # Output:
-// # {
-// # "final_position": [1, 3],
-// # "final_direction": "N",
-// # "status": "Success"
-// # }
-
-// # =================
-
-// # grid
-// # size = 5
-// # obstacles = [(1, 2), (3, 3)]
-// # commands = "LMLMLMLMMMM"
-
-// # --
-
-// # {
-// # "final_position": [1, 2],
-// # "final_direction": "N",
-// # "status": "Obstacle encountered"
-// # }
-
-// # =================
-
-// # grid
-// # size = 5
-// # _
-// # obstacles = []
-// # commands = "MMMMMMMM"
-
-// # --
-
-// # {
-// # "final_position": [0, 4],
-// # "final_direction": "N",
-// # "status": "Out of bounds"
-// # }
