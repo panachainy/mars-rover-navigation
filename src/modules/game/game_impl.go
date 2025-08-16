@@ -63,7 +63,6 @@ func (e *gameImpl) NavigateRover(size int, obstacles []model.Position, commands 
 		}
 	}
 
-	// FIXME: change mock to real one
 	return Result{
 		FinalPosition:  rover.GetPosition(),
 		FinalDirection: rover.GetDirection(),
