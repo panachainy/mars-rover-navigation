@@ -2,7 +2,6 @@ package rover
 
 import (
 	"mars-rover-navigation/src/model"
-	"sync"
 )
 
 type roverImpl struct {
@@ -10,24 +9,11 @@ type roverImpl struct {
 	Direction model.Direction
 }
 
-var (
-	instance *roverImpl
-	once     sync.Once
-)
-
 func NewRover(x, y int, direction model.Direction) *roverImpl {
-	once.Do(func() {
-		instance = &roverImpl{
-			Position:  model.Position{X: x, Y: y},
-			Direction: direction,
-		}
-	})
-	return instance
-}
-
-func Reset() {
-	once = sync.Once{}
-	instance = nil
+	return &roverImpl{
+		Position:  model.Position{X: x, Y: y},
+		Direction: direction,
+	}
 }
 
 func (r *roverImpl) GetTryMovePosition() model.Position {
