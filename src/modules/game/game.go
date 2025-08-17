@@ -1,3 +1,5 @@
+//go:generate go run github.com/golang/mock/mockgen -source=game.go -destination=./mock/mock_game.go -package=mock
+
 package game
 
 import (
