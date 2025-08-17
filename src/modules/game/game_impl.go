@@ -7,6 +7,8 @@ import (
 )
 
 type gameImpl struct {
+	envFactory   func(int, []model.Position) environment.Environment
+	roverFactory func(int, int, model.Direction) rover.Rover
 }
 
 type Status string
@@ -25,7 +27,21 @@ type Result struct {
 }
 
 func NewGame() *gameImpl {
-	return &gameImpl{}
+	return &gameImpl{
+		envFactory: func(size int, obstacles []model.Position) environment.Environment {
+			return environment.NewEnvironment(size, obstacles)
+		},
+		roverFactory: func(x, y int, direction model.Direction) rover.Rover {
+			return rover.NewRover(x, y, direction)
+		},
+	}
+}
+
+func NewGameWithFactories(envFactory func(int, []model.Position) environment.Environment, roverFactory func(int, int, model.Direction) rover.Rover) *gameImpl {
+	return &gameImpl{
+		envFactory:   envFactory,
+		roverFactory: roverFactory,
+	}
 }
 
 func isValidInputs(size int, obstacles []model.Position, commands string) bool {
@@ -61,8 +77,8 @@ func (e *gameImpl) NavigateRover(size int, obstacles []model.Position, commands 
 		}
 	}
 
-	var env environment.Environment = environment.NewEnvironment(size, obstacles)
-	var rover rover.Rover = rover.NewRover(0, 0, "N")
+	var env environment.Environment = e.envFactory(size, obstacles)
+	var rover rover.Rover = e.roverFactory(0, 0, "N")
 
 	for _, cmd := range commands {
 		switch cmd {
