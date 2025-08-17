@@ -201,3 +201,94 @@ func TestCanMove(t *testing.T) {
 		})
 	}
 }
+func TestGetGrid(t *testing.T) {
+	tests := []struct {
+		name      string
+		size      int
+		obstacles []model.Position
+	}{
+		{
+			name:      "empty grid with no obstacles",
+			size:      3,
+			obstacles: []model.Position{},
+		},
+		{
+			name:      "grid with single obstacle",
+			size:      3,
+			obstacles: []model.Position{{X: 1, Y: 1}},
+		},
+		{
+			name:      "grid with multiple obstacles",
+			size:      4,
+			obstacles: []model.Position{{X: 0, Y: 1}, {X: 2, Y: 3}, {X: 1, Y: 0}},
+		},
+		{
+			name:      "1x1 grid with obstacle",
+			size:      1,
+			obstacles: []model.Position{{X: 0, Y: 0}},
+		},
+		{
+			name:      "1x1 grid without obstacle",
+			size:      1,
+			obstacles: []model.Position{},
+		},
+		{
+			name:      "larger grid with scattered obstacles",
+			size:      5,
+			obstacles: []model.Position{{X: 0, Y: 0}, {X: 2, Y: 2}, {X: 4, Y: 4}, {X: 1, Y: 3}},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			env := NewEnvironment(tt.size, tt.obstacles)
+			grid := env.GetGrid()
+
+			// Test grid dimensions
+			if len(grid) != tt.size {
+				t.Errorf("GetGrid() returned grid with %d rows, expected %d", len(grid), tt.size)
+			}
+
+			for i, row := range grid {
+				if len(row) != tt.size {
+					t.Errorf("GetGrid() row %d has %d columns, expected %d", i, len(row), tt.size)
+				}
+			}
+
+			// Test each cell in the grid
+			for x := 0; x < tt.size; x++ {
+				for y := 0; y < tt.size; y++ {
+					cell := grid[x][y]
+
+					// Check position is correct
+					if cell.Position.X != x || cell.Position.Y != y {
+						t.Errorf("GetGrid() cell at [%d][%d] has position (%d, %d), expected (%d, %d)",
+							x, y, cell.Position.X, cell.Position.Y, x, y)
+					}
+
+					// Check obstacle status is correct
+					expectedIsObstacle := isPositionInObstacles(model.Position{X: x, Y: y}, tt.obstacles)
+					if cell.IsObstacle != expectedIsObstacle {
+						t.Errorf("GetGrid() cell at [%d][%d] has IsObstacle=%v, expected %v",
+							x, y, cell.IsObstacle, expectedIsObstacle)
+					}
+				}
+			}
+
+			// Test that returned grid is not nil
+			if grid == nil {
+				t.Error("GetGrid() returned nil grid")
+			}
+		})
+	}
+}
+
+// Helper function for testing
+func isPositionInObstacles(position model.Position, obstacles []model.Position) bool {
+	for _, obstacle := range obstacles {
+		if position.X == obstacle.X && position.Y == obstacle.Y {
+			return true
+		}
+	}
+	return false
+}
