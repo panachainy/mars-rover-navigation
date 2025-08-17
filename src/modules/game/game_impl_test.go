@@ -22,6 +22,48 @@ func TestNewGame(t *testing.T) {
 	if game.roverFactory == nil {
 		t.Error("roverFactory should not be nil")
 	}
+
+	// Test that factories actually work and create proper instances
+	testObstacles := []model.Position{{X: 1, Y: 1}}
+	env := game.envFactory(5, testObstacles)
+	if env == nil {
+		t.Error("envFactory should create a non-nil environment")
+	}
+
+	rover := game.roverFactory(2, 3, model.Direction("E"))
+	if rover == nil {
+		t.Error("roverFactory should create a non-nil rover")
+	}
+
+	// Test that the rover is created with correct initial values
+	if rover.GetPosition().X != 2 || rover.GetPosition().Y != 3 {
+		t.Errorf("Expected rover position (2,3), got (%d,%d)", rover.GetPosition().X, rover.GetPosition().Y)
+	}
+	if rover.GetDirection() != model.Direction("E") {
+		t.Errorf("Expected rover direction E, got %v", rover.GetDirection())
+	}
+}
+
+func TestNewGame_FactoriesCreateDifferentInstances(t *testing.T) {
+	game := NewGame()
+
+	// Create two environments with same parameters
+	env1 := game.envFactory(5, []model.Position{{X: 1, Y: 1}})
+	env2 := game.envFactory(5, []model.Position{{X: 1, Y: 1}})
+
+	// They should be different instances
+	if env1 == env2 {
+		t.Error("envFactory should create different instances on each call")
+	}
+
+	// Create two rovers with same parameters
+	rover1 := game.roverFactory(0, 0, model.Direction("N"))
+	rover2 := game.roverFactory(0, 0, model.Direction("N"))
+
+	// They should be different instances
+	if rover1 == rover2 {
+		t.Error("roverFactory should create different instances on each call")
+	}
 }
 
 func TestNewGameWithFactories(t *testing.T) {
@@ -334,5 +376,59 @@ func TestNavigateRover_StopOnFirstObstacle(t *testing.T) {
 	expectedPosition := model.Position{X: 1, Y: 2}
 	if result.FinalPosition != expectedPosition {
 		t.Errorf("Expected position %v, got %v", expectedPosition, result.FinalPosition)
+	}
+}
+
+func TestNavigateRover_InvalidInput(t *testing.T) {
+	game := NewGame()
+
+	tests := []struct {
+		name      string
+		size      int
+		obstacles []model.Position
+		commands  string
+	}{
+		{
+			name:      "negative size",
+			size:      -1,
+			obstacles: []model.Position{},
+			commands:  "LRM",
+		},
+		{
+			name:      "zero size",
+			size:      0,
+			obstacles: []model.Position{},
+			commands:  "LRM",
+		},
+		{
+			name:      "obstacle out of bounds",
+			size:      5,
+			obstacles: []model.Position{{X: 5, Y: 1}},
+			commands:  "LRM",
+		},
+		{
+			name:      "invalid command character",
+			size:      5,
+			obstacles: []model.Position{},
+			commands:  "LRMX",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := game.NavigateRover(tt.size, tt.obstacles, tt.commands)
+
+			if result.Status != StatusInvalidInput {
+				t.Errorf("Expected status %v, got %v", StatusInvalidInput, result.Status)
+			}
+			expectedPosition := model.Position{X: 0, Y: 0}
+			if result.FinalPosition != expectedPosition {
+				t.Errorf("Expected position %v, got %v", expectedPosition, result.FinalPosition)
+			}
+			expectedDirection := model.Direction("N")
+			if result.FinalDirection != expectedDirection {
+				t.Errorf("Expected direction %v, got %v", expectedDirection, result.FinalDirection)
+			}
+		})
 	}
 }

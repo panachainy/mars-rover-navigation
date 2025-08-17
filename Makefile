@@ -44,12 +44,12 @@ test.race:
 
 tr: test.report
 test.report:
-	go test -race -covermode=atomic -coverprofile=covprofile.out ./...
+	go test -race -covermode=atomic -coverprofile=covprofile.out $$(go list ./... | grep -v '/mock')
 	make tc.html
 
 tc: test.cov
 test.cov:
-	go test -race -covermode=atomic -coverprofile=covprofile.out ./...
+	go test -race -covermode=atomic -coverprofile=covprofile.out $$(go list ./... | grep -v '/mock')
 	make test.cov.xml
 
 # Generate XML coverage report
