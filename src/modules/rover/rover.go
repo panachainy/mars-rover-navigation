@@ -1,3 +1,5 @@
+//go:generate go run github.com/golang/mock/mockgen -source=rover.go -destination=./mock/mock_rover.go -package=mock
+
 package rover
 
 import "mars-rover-navigation/src/model"
