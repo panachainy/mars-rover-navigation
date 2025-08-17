@@ -55,6 +55,6 @@
 - `make t` for run all unit tests.
 - `make it` for run integration tests.
 - `make test.all` for run both of unit and integration tests.
-- `make test.report` for generate test coverage report.
+- `make test.report` for run both of unit and integration tests & generate test coverage then open in HTML.
 
 ## Additional Notes
