@@ -1,5 +1,7 @@
 # Mars rover navigation
 
+[![codecov](https://codecov.io/gh/panachainy/mars-rover-navigation/graph/badge.svg?token=n9ftX5F3nA)](https://codecov.io/gh/panachainy/mars-rover-navigation)
+
 ## Project Description
 
 - Project structure explanation.
