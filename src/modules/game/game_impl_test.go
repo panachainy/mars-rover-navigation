@@ -22,6 +22,48 @@ func TestNewGame(t *testing.T) {
 	if game.roverFactory == nil {
 		t.Error("roverFactory should not be nil")
 	}
+
+	// Test that factories actually work and create proper instances
+	testObstacles := []model.Position{{X: 1, Y: 1}}
+	env := game.envFactory(5, testObstacles)
+	if env == nil {
+		t.Error("envFactory should create a non-nil environment")
+	}
+
+	rover := game.roverFactory(2, 3, model.Direction("E"))
+	if rover == nil {
+		t.Error("roverFactory should create a non-nil rover")
+	}
+
+	// Test that the rover is created with correct initial values
+	if rover.GetPosition().X != 2 || rover.GetPosition().Y != 3 {
+		t.Errorf("Expected rover position (2,3), got (%d,%d)", rover.GetPosition().X, rover.GetPosition().Y)
+	}
+	if rover.GetDirection() != model.Direction("E") {
+		t.Errorf("Expected rover direction E, got %v", rover.GetDirection())
+	}
+}
+
+func TestNewGame_FactoriesCreateDifferentInstances(t *testing.T) {
+	game := NewGame()
+
+	// Create two environments with same parameters
+	env1 := game.envFactory(5, []model.Position{{X: 1, Y: 1}})
+	env2 := game.envFactory(5, []model.Position{{X: 1, Y: 1}})
+
+	// They should be different instances
+	if env1 == env2 {
+		t.Error("envFactory should create different instances on each call")
+	}
+
+	// Create two rovers with same parameters
+	rover1 := game.roverFactory(0, 0, model.Direction("N"))
+	rover2 := game.roverFactory(0, 0, model.Direction("N"))
+
+	// They should be different instances
+	if rover1 == rover2 {
+		t.Error("roverFactory should create different instances on each call")
+	}
 }
 
 func TestNewGameWithFactories(t *testing.T) {
