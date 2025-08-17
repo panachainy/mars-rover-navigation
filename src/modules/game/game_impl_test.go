@@ -378,3 +378,57 @@ func TestNavigateRover_StopOnFirstObstacle(t *testing.T) {
 		t.Errorf("Expected position %v, got %v", expectedPosition, result.FinalPosition)
 	}
 }
+
+func TestNavigateRover_InvalidInput(t *testing.T) {
+	game := NewGame()
+
+	tests := []struct {
+		name      string
+		size      int
+		obstacles []model.Position
+		commands  string
+	}{
+		{
+			name:      "negative size",
+			size:      -1,
+			obstacles: []model.Position{},
+			commands:  "LRM",
+		},
+		{
+			name:      "zero size",
+			size:      0,
+			obstacles: []model.Position{},
+			commands:  "LRM",
+		},
+		{
+			name:      "obstacle out of bounds",
+			size:      5,
+			obstacles: []model.Position{{X: 5, Y: 1}},
+			commands:  "LRM",
+		},
+		{
+			name:      "invalid command character",
+			size:      5,
+			obstacles: []model.Position{},
+			commands:  "LRMX",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result := game.NavigateRover(tt.size, tt.obstacles, tt.commands)
+
+			if result.Status != StatusInvalidInput {
+				t.Errorf("Expected status %v, got %v", StatusInvalidInput, result.Status)
+			}
+			expectedPosition := model.Position{X: 0, Y: 0}
+			if result.FinalPosition != expectedPosition {
+				t.Errorf("Expected position %v, got %v", expectedPosition, result.FinalPosition)
+			}
+			expectedDirection := model.Direction("N")
+			if result.FinalDirection != expectedDirection {
+				t.Errorf("Expected direction %v, got %v", expectedDirection, result.FinalDirection)
+			}
+		})
+	}
+}
