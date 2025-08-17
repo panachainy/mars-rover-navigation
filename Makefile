@@ -44,28 +44,28 @@ test.race:
 
 tr: test.report
 test.report:
-	go test -race -covermode=atomic -coverprofile=coverage.txt ./...
+	go test -race -covermode=atomic -coverprofile=covprofile.out ./...
 	make tc.html
 
 tc: test.cov
 test.cov:
-	go test -race -covermode=atomic -coverprofile=coverage.txt ./...
+	go test -race -covermode=atomic -coverprofile=covprofile.out ./...
 	make test.cov.xml
 
 # Generate XML coverage report
 tc.xml: test.cov.xml
 test.cov.xml:
-	gocov convert coverage.txt > covprofile.xml
+	gocov convert covprofile.out > covprofile.xml
 
 # Generate HTML coverage report
 tc.html: test.cov.html
 test.cov.html:
-	go tool cover -html=coverage.txt -o covprofile.html
+	go tool cover -html=covprofile.out -o covprofile.html
 	open covprofile.html
 
 c: clean
 clean:
-	rm -f coverage.txt covprofile.xml covprofile.html
+	rm -f covprofile.out covprofile.xml covprofile.html
 	rm -rf tmp
 
 f: fmt
